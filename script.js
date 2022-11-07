@@ -1,3 +1,11 @@
+const tempEl = document.getElementById("temp");
+
+const displayCurrentWeather = (data) => {
+let temp = data.main.temp;
+console.log(temp);
+tempEl.innerHTML = temp + " Degrees Farenheit";
+}
+
 const apiRun = (city) => {
 fetch(
     `https://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=5&appid=216201144e1f793e1de02515a9f93cd6`,
@@ -18,7 +26,7 @@ fetch(
     console.log(lat);
     console.log(data);
 
-    const currentWeather = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${long}&appid=216201144e1f793e1de02515a9f93cd6`;
+    const currentWeather = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${long}&appid=216201144e1f793e1de02515a9f93cd6&units=imperial`;
 
     console.log(currentWeather)
 
@@ -28,6 +36,7 @@ fetch(
     })
     .then((data) =>{
       console.log(data);
+      displayCurrentWeather(data)
     })
   });
 }
