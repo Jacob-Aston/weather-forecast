@@ -18,11 +18,11 @@ fetch(
     console.log(lat);
     console.log(data);
 
-    const weatherData = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${long}&appid=216201144e1f793e1de02515a9f93cd6`;
+    const currentWeather = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${long}&appid=216201144e1f793e1de02515a9f93cd6`;
 
-    console.log(weatherData)
+    console.log(currentWeather)
 
-    fetch(weatherData)
+    fetch(currentWeather)
     .then((response) =>{
       return response.json();
     })
