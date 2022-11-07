@@ -51,7 +51,7 @@ const displayFiveDay = (data) => {
   for (let i = 0; i < 5; i++) {
     let noon = [2, 10, 18, 26, 34];
     let iconURL = `http://openweathermap.org/img/wn/${data.list[noon[i]].weather[0].icon}.png`;
-    let windFor = data.list[noon[0]].wind
+    let windFor = data.list[noon[i]].wind
     let html = (`
     <div>${data.list[noon[i]].dt_txt}</div>
     <img src="${iconURL}"></img>
