@@ -50,16 +50,19 @@ const displayCurrentWeather = (data) => {
 const displayFiveDay = (data) => {
   for (let i = 0; i < 5; i++) {
     let noon = [2, 10, 18, 26, 34];
-    let iconURL = `http://openweathermap.org/img/wn/${data.list[noon[i]].weather[0].icon}.png`
+    let iconURL = `http://openweathermap.org/img/wn/${data.list[noon[i]].weather[0].icon}.png`;
+    let windFor = data.list[noon[0]].wind
     let html = (`
     <div>${data.list[noon[i]].dt_txt}</div>
     <img src="${iconURL}"></img>
     <div>${data.list[noon[i]].main.temp}</div>
-    <div>wind</div>
+    <div>
+      Wind Speed: ${windFor.speed}mph
+      Wind Direction: ${getWindDirection(windFor)}
+    </div>
     `);
     let element = document.getElementById(`day-${(i + 1)}`);
     
-    console.log(data.list[noon[i]].weather[0].description)
     // console.log("noon: ", noon);
     // console.log("html: ", html);
     element.innerHTML = html;
