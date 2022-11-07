@@ -46,8 +46,22 @@ const displayCurrentWeather = (data) => {
   coordsEl.innerHTML = `Longitude: ${coords.lon}, Latitude: ${coords.lat}`;
 };
 
+//generates html for five day forecast
 const displayFiveDay = (data) => {
-  console.log('hi')
+  for (let i = 0; i < 5; i++) {
+    let noon = [2, 10, 18, 26, 34];
+    let html = (`
+    <div>${data.list[noon[i]].dt_txt}</div>
+    <div>icon</div>
+    <div>${data.list[noon[i]].main.temp}</div>
+    <div>wind</div>
+    `);
+    let element = document.getElementById(`day-${(i + 1)}`);
+    
+    // console.log("noon: ", noon);
+    // console.log("html: ", html);
+    element.innerHTML = html;
+  }
 }
 
 //takes searched city and gets its coordinates
@@ -90,7 +104,7 @@ const apiRun = (city) => {
             return response.json();
           })
           .then((data) => {
-            console.log(data)
+            console.log("forecast: ", data)
             displayFiveDay(data)
           })
         });
