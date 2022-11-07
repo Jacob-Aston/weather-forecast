@@ -1,9 +1,20 @@
+const locationEl = document.getElementById("location");
+const weatherEl = document.getElementById("weather");
 const tempEl = document.getElementById("temp");
+const windEl = document.getElementById("wind");
+const coordsEl = document.getElementById("coords");
 
 const displayCurrentWeather = (data) => {
-let temp = data.main.temp;
-console.log(temp);
-tempEl.innerHTML = temp + " Degrees Farenheit";
+  let weather = data.weather[0].description;
+  let temp = data.main.temp;
+  let wind = data.wind
+  let coords = data.coord;
+
+  locationEl.innerHTML = data.name;
+  weatherEl.innerHTML = weather;
+  tempEl.innerHTML = temp + " Degrees Farenheit";
+  windEl.innerHTML = `Wind Speed: ${wind.speed}, Wind Direction: ${wind.deg}`;
+  coordsEl.innerHTML = `Longitude: ${coords.lon}, Latitude: ${coords.lat}`
 }
 
 const apiRun = (city) => {
