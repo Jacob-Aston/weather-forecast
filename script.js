@@ -46,6 +46,10 @@ const displayCurrentWeather = (data) => {
   coordsEl.innerHTML = `Longitude: ${coords.lon}, Latitude: ${coords.lat}`;
 };
 
+const displayFiveDay = (data) => {
+  console.log('hi')
+}
+
 //takes searched city and gets its coordinates
 const apiRun = (city) => {
   fetch(
@@ -66,18 +70,29 @@ const apiRun = (city) => {
 
       console.log("Geocode: ", data);
 
-      const currentWeather = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${long}&appid=216201144e1f793e1de02515a9f93cd6&units=imperial`;
+      const currentWeatherURL = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${long}&appid=216201144e1f793e1de02515a9f93cd6&units=imperial`;
+
+      const forecastURL = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${long}&appid=216201144e1f793e1de02515a9f93cd6&units=imperial`;
 
       // console.log(currentWeather)
 
       //second api call to get current weather
-      fetch(currentWeather)
+      fetch(currentWeatherURL)
         .then((response) => {
           return response.json();
         })
         .then((data) => {
           console.log("Current Weather: ", data);
           displayCurrentWeather(data);
+
+          fetch(forecastURL)
+          .then((response) => {
+            return response.json();
+          })
+          .then((data) => {
+            console.log(data)
+            displayFiveDay(data)
+          })
         });
     });
 };
