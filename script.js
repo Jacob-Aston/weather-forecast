@@ -53,13 +53,13 @@ const displayFiveDay = (data) => {
     let iconURL = `http://openweathermap.org/img/wn/${data.list[noon[i]].weather[0].icon}.png`;
     let windFor = data.list[noon[i]].wind
     let html = (`
-    <div>${data.list[noon[i]].dt_txt}</div>
+    <h2>${data.list[noon[i]].dt_txt}</h2>
     <img src="${iconURL}"></img>
-    <div>${data.list[noon[i]].main.temp}</div>
-    <div>
-      Wind Speed: ${windFor.speed}mph
-      Wind Direction: ${getWindDirection(windFor)}
-    </div>
+    <h2 class="text-center">Temp</h2>
+    <div>${Math.floor(data.list[noon[i]].main.temp)} Degrees F</div>
+    <h2 class="text-center">Wind</h2>
+    <div class="text-center">Speed: <br>${windFor.speed} mph</div>
+    <div class="text-center">Direction: <br>${getWindDirection(windFor)}</div>
     `);
     let element = document.getElementById(`day-${(i + 1)}`);
     
