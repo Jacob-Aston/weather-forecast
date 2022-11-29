@@ -3,6 +3,7 @@ const weatherEl = document.getElementById("weather");
 const tempEl = document.getElementById("temp");
 const windEl = document.getElementById("wind");
 const coordsEl = document.getElementById("coords");
+const searchHistory = document.getElementById("search-history");
 
 //changes wind direction from degrees to cardinal
 //https://stackoverflow.com/questions/7490660/converting-wind-direction-in-angles-to-text-words
@@ -52,14 +53,15 @@ const displayFiveDay = (data) => {
     let noon = [2, 10, 18, 26, 34];
     let iconURL = `http://openweathermap.org/img/wn/${data.list[noon[i]].weather[0].icon}.png`;
     let windFor = data.list[noon[i]].wind
+    let dateFor = data.list[noon[i]].dt_txt.split(" ", 1)
     let html = (`
-    <h2>${data.list[noon[i]].dt_txt}</h2>
+    <h2>${dateFor}</h2>
     <img src="${iconURL}"></img>
     <h2 class="text-center">Temp</h2>
     <div>${Math.floor(data.list[noon[i]].main.temp)} Degrees F</div>
     <h2 class="text-center">Wind</h2>
     <div class="text-center">Speed: <br>${windFor.speed} mph</div>
-    <div class="text-center">Direction: <br>${getWindDirection(windFor)}</div>
+    <div class="text-center">${getWindDirection(windFor)}</div>
     `);
     let element = document.getElementById(`day-${(i + 1)}`);
     
@@ -71,6 +73,9 @@ const displayFiveDay = (data) => {
 
 //takes searched city and gets its coordinates
 const apiRun = (city) => {
+  const newSearchHistoryItem = document.createElement("button")
+  newSearchHistoryItem.innerHTML = getCities()
+  searchHistory.append(newSearchHistoryItem)
   fetch(
     `https://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=5&appid=216201144e1f793e1de02515a9f93cd6`,
     {
@@ -119,11 +124,31 @@ const apiRun = (city) => {
 const formEl = document.getElementById("search-form");
 const formEntry = formEl.elements["search-bar"];
 
+// const searchHistoryClick = (event) => {
+//   let target = event.target;
+//   console.log(target);
+// }
+
+
+const getCities = () => {
+  const raw = localStorage.getItem('cities');
+  if (!raw) return []
+  
+  return JSON.parse(raw)
+}
+
+const saveCities = (cities) => {
+  localStorage.setItem("cities", JSON.stringify(cities))
+}
+
 //form entry to search for city
 formEl.addEventListener("submit", function (event) {
-  event.preventDefault();
+  event.preventDefault(); 
   let citySearch = formEntry.value;
+  
+const cities = getCities();
+cities.push(citySearch)
+saveCities(cities)
 
-  // console.log(citySearch)
   apiRun(citySearch);
 });
