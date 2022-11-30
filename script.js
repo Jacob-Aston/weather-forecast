@@ -96,7 +96,6 @@ const apiRun = (city) => {
 
       const forecastURL = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${long}&appid=216201144e1f793e1de02515a9f93cd6&units=imperial`;
 
-      // console.log(currentWeather)
 
       //second api call to get current weather
       fetch(currentWeatherURL)
@@ -175,3 +174,15 @@ formEl.addEventListener("submit", function (event) {
 
   apiRun(citySearch);
 });
+
+const init = () => {
+  const cities = getCities();
+  const lastSearch = cities[cities.length - 1]
+  const homeTown = "west valley city"
+  if ( cities.length == 0 ) apiRun(homeTown);
+  if ( cities.length >= 1 ) apiRun(lastSearch);
+  displaySearchHistory();
+  addClearButton()
+}
+
+window.onload = init()
