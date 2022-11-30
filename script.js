@@ -38,8 +38,6 @@ const displayCurrentWeather = (data) => {
   let wind = data.wind;
   let coords = data.coord;
 
-  // console.log()
-
   locationEl.innerHTML = data.name;
   weatherEl.innerHTML = weather;
   tempEl.innerHTML = temp + " Degrees Farenheit";
@@ -67,10 +65,9 @@ const displayFiveDay = (data) => {
     <div class="text-center">Speed: <br>${windFor.speed} mph</div>
     <div class="text-center">${getWindDirection(windFor)}</div>
     `;
+
     let element = document.getElementById(`day-${i + 1}`);
 
-    // console.log("noon: ", noon);
-    // console.log("html: ", html);
     element.innerHTML = html;
   }
 };
@@ -134,14 +131,15 @@ const getCities = () => {
 };
 
 const saveCities = (cities) => {
-  let searchHistoryLength = 5;
+  const searchHistoryLength = 5;
   if (cities.length > searchHistoryLength) return;
   if (cities.length <= searchHistoryLength) {
     localStorage.setItem("cities", JSON.stringify(cities));
   }
 };
 
-const displaySearchHistory = (cities) => {
+const displaySearchHistory = () => {
+  const cities = getCities();
   searchHistory.innerHTML = "";
   cities.forEach((cities) => {
     const newSearchHistoryItem = document.createElement("button");
@@ -154,15 +152,26 @@ const displaySearchHistory = (cities) => {
   });
 };
 
+const addClearButton = () => {
+  const clearButton = document.createElement("button");
+  clearButton.innerHTML = "Clear History";
+  clearButton.addEventListener("click", function() {
+    saveCities([])
+    searchHistory.innerHTML = "";
+  })
+  searchHistory.append(clearButton);
+}
+
 //form entry to search for city
 formEl.addEventListener("submit", function (event) {
   event.preventDefault();
   let citySearch = formEntry.value;
 
   const cities = getCities();
-  displaySearchHistory(cities);
   cities.push(citySearch);
   saveCities(cities);
+  displaySearchHistory();
+  addClearButton()
 
   apiRun(citySearch);
 });
