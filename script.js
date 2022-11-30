@@ -146,7 +146,10 @@ const displaySearchHistory = (cities) => {
   cities.forEach((cities) => {
     const newSearchHistoryItem = document.createElement("button");
     newSearchHistoryItem.innerHTML = cities;
-    newSearchHistoryItem.addEventListener("click", apiRun(`${cities}`));
+    newSearchHistoryItem.addEventListener("click", function(e){
+      const target = e.target;
+      apiRun(target.innerHTML)
+    });
     searchHistory.append(newSearchHistoryItem);
   });
 };
