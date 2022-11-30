@@ -125,10 +125,6 @@ const apiRun = (city) => {
 const formEl = document.getElementById("search-form");
 const formEntry = formEl.elements["search-bar"];
 
-// const searchHistoryClick = (event) => {
-//   let target = event.target;
-//   console.log(target);
-// }
 
 const getCities = () => {
   const raw = localStorage.getItem("cities");
@@ -146,10 +142,11 @@ const saveCities = (cities) => {
 };
 
 const displaySearchHistory = (cities) => {
-  const historyList = cities;
+  searchHistory.innerHTML = "";
   cities.forEach((cities) => {
     const newSearchHistoryItem = document.createElement("button");
     newSearchHistoryItem.innerHTML = cities;
+    newSearchHistoryItem.addEventListener("click", apiRun(`${cities}`));
     searchHistory.append(newSearchHistoryItem);
   });
 };
@@ -160,9 +157,9 @@ formEl.addEventListener("submit", function (event) {
   let citySearch = formEntry.value;
 
   const cities = getCities();
+  displaySearchHistory(cities);
   cities.push(citySearch);
   saveCities(cities);
-  displaySearchHistory(cities);
 
   apiRun(citySearch);
 });
