@@ -43,7 +43,9 @@ const displayCurrentWeather = (data) => {
   locationEl.innerHTML = data.name;
   weatherEl.innerHTML = weather;
   tempEl.innerHTML = temp + " Degrees Farenheit";
-  windEl.innerHTML = `Wind Speed: ${wind.speed}, Wind Direction: ${getWindDirection(wind)}`;
+  windEl.innerHTML = `Wind Speed: ${
+    wind.speed
+  }, Wind Direction: ${getWindDirection(wind)}`;
   coordsEl.innerHTML = `Longitude: ${coords.lon}, Latitude: ${coords.lat}`;
 };
 
@@ -51,10 +53,12 @@ const displayCurrentWeather = (data) => {
 const displayFiveDay = (data) => {
   for (let i = 0; i < 5; i++) {
     let noon = [2, 10, 18, 26, 34];
-    let iconURL = `http://openweathermap.org/img/wn/${data.list[noon[i]].weather[0].icon}.png`;
-    let windFor = data.list[noon[i]].wind
-    let dateFor = data.list[noon[i]].dt_txt.split(" ", 1)
-    let html = (`
+    let iconURL = `http://openweathermap.org/img/wn/${
+      data.list[noon[i]].weather[0].icon
+    }.png`;
+    let windFor = data.list[noon[i]].wind;
+    let dateFor = data.list[noon[i]].dt_txt.split(" ", 1);
+    let html = `
     <h2>${dateFor}</h2>
     <img src="${iconURL}"></img>
     <h2 class="text-center">Temp</h2>
@@ -62,20 +66,17 @@ const displayFiveDay = (data) => {
     <h2 class="text-center">Wind</h2>
     <div class="text-center">Speed: <br>${windFor.speed} mph</div>
     <div class="text-center">${getWindDirection(windFor)}</div>
-    `);
-    let element = document.getElementById(`day-${(i + 1)}`);
-    
+    `;
+    let element = document.getElementById(`day-${i + 1}`);
+
     // console.log("noon: ", noon);
     // console.log("html: ", html);
     element.innerHTML = html;
   }
-}
+};
 
 //takes searched city and gets its coordinates
 const apiRun = (city) => {
-  const newSearchHistoryItem = document.createElement("button")
-  newSearchHistoryItem.innerHTML = getCities()
-  searchHistory.append(newSearchHistoryItem)
   fetch(
     `https://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=5&appid=216201144e1f793e1de02515a9f93cd6`,
     {
@@ -110,13 +111,13 @@ const apiRun = (city) => {
           displayCurrentWeather(data);
 
           fetch(forecastURL)
-          .then((response) => {
-            return response.json();
-          })
-          .then((data) => {
-            console.log("forecast: ", data)
-            displayFiveDay(data)
-          })
+            .then((response) => {
+              return response.json();
+            })
+            .then((data) => {
+              console.log("forecast: ", data);
+              displayFiveDay(data);
+            });
         });
     });
 };
@@ -129,26 +130,39 @@ const formEntry = formEl.elements["search-bar"];
 //   console.log(target);
 // }
 
-
 const getCities = () => {
-  const raw = localStorage.getItem('cities');
-  if (!raw) return []
-  
-  return JSON.parse(raw)
-}
+  const raw = localStorage.getItem("cities");
+  if (!raw) return [];
+
+  return JSON.parse(raw);
+};
 
 const saveCities = (cities) => {
-  localStorage.setItem("cities", JSON.stringify(cities))
-}
+  let searchHistoryLength = 5;
+  if (cities.length > searchHistoryLength) return;
+  if (cities.length <= searchHistoryLength) {
+    localStorage.setItem("cities", JSON.stringify(cities));
+  }
+};
+
+const displaySearchHistory = (cities) => {
+  const historyList = cities;
+  cities.forEach((cities) => {
+    const newSearchHistoryItem = document.createElement("button");
+    newSearchHistoryItem.innerHTML = cities;
+    searchHistory.append(newSearchHistoryItem);
+  });
+};
 
 //form entry to search for city
 formEl.addEventListener("submit", function (event) {
-  event.preventDefault(); 
+  event.preventDefault();
   let citySearch = formEntry.value;
-  
-const cities = getCities();
-cities.push(citySearch)
-saveCities(cities)
+
+  const cities = getCities();
+  cities.push(citySearch);
+  saveCities(cities);
+  displaySearchHistory(cities);
 
   apiRun(citySearch);
 });
