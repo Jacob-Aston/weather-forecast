@@ -5,7 +5,7 @@ const windEl = document.getElementById("wind");
 const coordsEl = document.getElementById("coords");
 const searchHistory = document.getElementById("search-history");
 
-//changes wind direction from degrees to cardinal
+//Changes wind direction from degrees to cardinal
 //https://stackoverflow.com/questions/7490660/converting-wind-direction-in-angles-to-text-words
 const getWindDirection = (wind) => {
   let degrees = wind.deg;
@@ -31,7 +31,7 @@ const getWindDirection = (wind) => {
   return arr[val % 16];
 };
 
-//displays data from current weather api call
+//Displays data from current weather api call
 const displayCurrentWeather = (data) => {
   let weather = data.weather[0].description;
   let temp = data.main.temp;
@@ -47,7 +47,7 @@ const displayCurrentWeather = (data) => {
   coordsEl.innerHTML = `Longitude: ${coords.lon}, Latitude: ${coords.lat}`;
 };
 
-//generates html for five day forecast
+//Generates elements for five day forecast
 const displayFiveDay = (data) => {
   for (let i = 0; i < 5; i++) {
     let noon = [2, 10, 18, 26, 34];
@@ -72,8 +72,9 @@ const displayFiveDay = (data) => {
   }
 };
 
-//takes searched city and gets its coordinates
+//Api calls to fetch weather data
 const apiRun = (city) => {
+  //Takes searched city and gets its coordinates
   fetch(
     `https://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=5&appid=216201144e1f793e1de02515a9f93cd6`,
     {
@@ -90,12 +91,11 @@ const apiRun = (city) => {
       const long = parseFloat(data[0].lon).toFixed(2);
       const lat = parseFloat(data[0].lat).toFixed(2);
 
-      console.log("Geocode: ", data);
+      // console.log("Geocode: ", data);
 
       const currentWeatherURL = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${long}&appid=216201144e1f793e1de02515a9f93cd6&units=imperial`;
 
       const forecastURL = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${long}&appid=216201144e1f793e1de02515a9f93cd6&units=imperial`;
-
 
       //second api call to get current weather
       fetch(currentWeatherURL)
@@ -103,7 +103,7 @@ const apiRun = (city) => {
           return response.json();
         })
         .then((data) => {
-          console.log("Current Weather: ", data);
+          // console.log("Current Weather: ", data);
           displayCurrentWeather(data);
 
           fetch(forecastURL)
@@ -111,7 +111,7 @@ const apiRun = (city) => {
               return response.json();
             })
             .then((data) => {
-              console.log("forecast: ", data);
+              // console.log("forecast: ", data);
               displayFiveDay(data);
             });
         });
@@ -121,7 +121,7 @@ const apiRun = (city) => {
 const formEl = document.getElementById("search-form");
 const formEntry = formEl.elements["search-bar"];
 
-
+//Pulls data from local storage
 const getCities = () => {
   const raw = localStorage.getItem("cities");
   if (!raw) return [];
@@ -129,6 +129,7 @@ const getCities = () => {
   return JSON.parse(raw);
 };
 
+//Saves data to local storage
 const saveCities = (cities) => {
   const searchHistoryLength = 5;
   if (cities.length > searchHistoryLength) return;
@@ -137,31 +138,33 @@ const saveCities = (cities) => {
   }
 };
 
+//Adds search history buttons to page
 const displaySearchHistory = () => {
   const cities = getCities();
   searchHistory.innerHTML = "";
   cities.forEach((cities) => {
     const newSearchHistoryItem = document.createElement("button");
     newSearchHistoryItem.innerHTML = cities;
-    newSearchHistoryItem.addEventListener("click", function(e){
+    newSearchHistoryItem.addEventListener("click", function (e) {
       const target = e.target;
-      apiRun(target.innerHTML)
+      apiRun(target.innerHTML);
     });
     searchHistory.append(newSearchHistoryItem);
   });
 };
 
+//Adds button to clear search history
 const addClearButton = () => {
   const clearButton = document.createElement("button");
   clearButton.innerHTML = "Clear History";
-  clearButton.addEventListener("click", function() {
-    saveCities([])
+  clearButton.addEventListener("click", function () {
+    saveCities([]);
     searchHistory.innerHTML = "";
-  })
+  });
   searchHistory.append(clearButton);
-}
+};
 
-//form entry to search for city
+//Form entry to search for city, then displays data
 formEl.addEventListener("submit", function (event) {
   event.preventDefault();
   let citySearch = formEntry.value;
@@ -170,19 +173,21 @@ formEl.addEventListener("submit", function (event) {
   cities.push(citySearch);
   saveCities(cities);
   displaySearchHistory();
-  addClearButton()
+  addClearButton();
 
   apiRun(citySearch);
 });
 
+//Initializes page with data from last search or my home town
 const init = () => {
   const cities = getCities();
-  const lastSearch = cities[cities.length - 1]
-  const homeTown = "west valley city"
-  if ( cities.length == 0 ) apiRun(homeTown);
-  if ( cities.length >= 1 ) apiRun(lastSearch);
+  const lastSearch = cities[cities.length - 1];
+  const homeTown = "west valley city";
+  if (cities.length == 0) apiRun(homeTown);
+  if (cities.length >= 1) apiRun(lastSearch);
   displaySearchHistory();
-  addClearButton()
-}
+  addClearButton();
+};
 
-window.onload = init()
+//Calls page initialization
+window.onload = init();
