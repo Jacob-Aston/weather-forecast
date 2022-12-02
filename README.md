@@ -12,25 +12,23 @@ Provide a short description explaining the what, why, and how of your project. U
 
 ## Usage
 
+Live Page: https://jacob-aston.github.io/weather-forecast/
+
+Repository: https://github.com/Jacob-Aston/weather-forecast
+
 The page loads on my home town of West Valley City.
 
-![] ()
+<img alt="Page loaded on West Valley City. Showing the current weather and a five day forecast." src="https://github.com/Jacob-Aston/weather-forecast/blob/main/assets/images/page-on-load.png?raw=true">
 
 Using the search bar you can look up other cities.
 
-![] ()
+<img alt="A white text entry box and a blue search button." src="https://github.com/Jacob-Aston/weather-forecast/blob/main/assets/images/search-bar.png?raw=true">
 
-Seached cities will display as buttons under the search bar. The "search history" is currently limited to five cities.
+Seached cities will display as buttons under the search bar. The "search history" is currently limited to five cities and isnt styled.
 
-![] ()
+<img alt="Search bar and save button with search history buttons below them." src="https://github.com/Jacob-Aston/weather-forecast/blob/main/assets/images/search-history.png?raw=true">
 
 Clicking on previously searched cities will display their weather information on the page. Clicking the "Clear History" button will remove the search history buttons. As well as clearing the local storage.
-
-To add a screenshot, create an `assets/images` folder in your repository and upload your screenshot to it. Then, using the relative filepath, add it to your README using the following syntax:
-
-    ```md
-    ![alt text](assets/images/screenshot.png)
-    ```
 
 ## Credits
 
